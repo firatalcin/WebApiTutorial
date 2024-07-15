@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTutorial.API.Data;
+using WebApiTutorial.API.Dtos.Stock;
 using WebApiTutorial.API.Mappers;
 
 namespace WebApiTutorial.API.Controllers
@@ -36,6 +37,15 @@ namespace WebApiTutorial.API.Controllers
             }
 
             return Ok(stock.ToStockDto());
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateStockRequestDto request)
+        {
+            var stockModel = request.ToStockFromCreateDto();
+            _context.Stocks.Add(stockModel);
+            _context.SaveChanges();
+            return Ok(StatusCode(201));
         }
     }
 }
