@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiTutorial.API.Data;
+using WebApiTutorial.API.Mappers;
 
 namespace WebApiTutorial.API.Controllers
 {
@@ -18,7 +19,8 @@ namespace WebApiTutorial.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var stocks = _context.Stocks.ToList();
+            var stocks = _context.Stocks.ToList()
+                .Select(x => x.ToStockDto());
 
             return Ok(stocks);
         }
@@ -33,7 +35,7 @@ namespace WebApiTutorial.API.Controllers
                 return NotFound();
             }
 
-            return Ok(stock);
+            return Ok(stock.ToStockDto());
         }
     }
 }
