@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApiTutorial.API.Data;
 using WebApiTutorial.API.Dtos.Stock;
 using WebApiTutorial.API.Mappers;
+using WebApiTutorial.API.Models;
 
 namespace WebApiTutorial.API.Controllers
 {
@@ -46,6 +47,29 @@ namespace WebApiTutorial.API.Controllers
             _context.Stocks.Add(stockModel);
             _context.SaveChanges();
             return Ok(StatusCode(201));
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDto request)
+        {
+            var stockModel = _context.Stocks.FirstOrDefault(x => x.Id == id);
+
+            if (stockModel is null) 
+            {
+                return NotFound();
+            }
+
+            stockModel.Symbol = request.Symbol;
+            stockModel.CompanyName = request.CompanyName;
+            stockModel.Purchase = request.Purchase;
+            stockModel.LastDiv = request.LastDiv;
+            stockModel.MarketCap = request.MarketCap;
+            stockModel.Industry = request.Industry;
+
+            _context.SaveChanges();
+
+            return Ok(stockModel.ToStockDto());
         }
     }
 }
