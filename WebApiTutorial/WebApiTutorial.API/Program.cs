@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using WebApiTutorial.API.Data;
+using WebApiTutorial.API.Interfaces;
+using WebApiTutorial.API.Repositories;
 
 namespace WebApiTutorial.API
 {
@@ -21,6 +23,8 @@ namespace WebApiTutorial.API
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("MSSql"));
             });
+
+            builder.Services.AddScoped<IStockRepository, StockRepository>();
 
             var app = builder.Build();
 
